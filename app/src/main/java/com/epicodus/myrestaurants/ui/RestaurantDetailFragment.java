@@ -1,5 +1,7 @@
 package com.epicodus.myrestaurants.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.epicodus.myrestaurants.Constants;
 import com.epicodus.myrestaurants.R;
 import com.epicodus.myrestaurants.models.Restaurant;
+import com.firebase.client.Firebase;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -17,7 +22,8 @@ import org.parceler.Parcels;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RestaurantDetailFragment extends Fragment {
+public class RestaurantDetailFragment extends Fragment implements View.OnClickListener {
+
     private static final int MAX_WIDTH = 400;
     private static final int MAX_HEIGHT = 300;
     @Bind(R.id.restaurantImageView)
@@ -51,6 +57,8 @@ public class RestaurantDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
         ButterKnife.bind(this, view);
+        mSaveRestaurantButton.setOnClickListener(this);
+        mPhoneLabel.setOnClickListener(this);
 
         Picasso.with(view.getContext())
                 .load(mRestaurant.getImageUrl())
@@ -63,5 +71,18 @@ public class RestaurantDetailFragment extends Fragment {
         mPhoneLabel.setText(mRestaurant.getPhone());
         mAddressLabel.setText(android.text.TextUtils.join(", ", mRestaurant.getAddress()));
         return view;
+    }
+    @Override
+    public void onClick(View v) {
+        if (v == mPhoneLabel) {
+            Intent phoneIntent = new Intent(Intent.ACTION_DIAL,
+                    Uri.parse("tel:" + mRestaurant.getPhone()));
+            startActivity(phoneIntent);
+        }
+        if (v== mSaveRestaurantButton){
+            Firebase ref = new Firebase(Constants.FIREBASE_URL_RESTAURANTS);
+            ref.push().setValue(mRestaurant);
+            Toast.makeText(getContext(), "saved", Toast.LENGTH_SHORT).show();
+        }
     }
 }
