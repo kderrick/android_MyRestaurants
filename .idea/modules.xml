@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RestaurantsApiCall.iml" filepath="$PROJECT_DIR$/RestaurantsApiCall.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android_MyRestaurants.iml" filepath="$PROJECT_DIR$/android_MyRestaurants.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
