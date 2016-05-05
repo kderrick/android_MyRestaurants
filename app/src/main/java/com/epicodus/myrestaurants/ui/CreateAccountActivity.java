@@ -1,5 +1,6 @@
 package com.epicodus.myrestaurants.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,6 +57,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             public void onSuccess(Map<String, Object> result) {
                 String uid = result.get("uid").toString();
                 createUserInFirebaseHelper(name, email, uid);
+                Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
 
             @Override

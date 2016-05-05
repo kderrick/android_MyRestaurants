@@ -1,8 +1,10 @@
 package com.epicodus.myrestaurants.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +28,15 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
 
     private static final int MAX_WIDTH = 400;
     private static final int MAX_HEIGHT = 300;
-    @Bind(R.id.restaurantImageView)
-    ImageView mImageLabel;
-    @Bind(R.id.restaurantNameTextView)
-    TextView mNameLabel;
+    @Bind(R.id.restaurantImageView) ImageView mImageLabel;
+    @Bind(R.id.restaurantNameTextView) TextView mNameLabel;
     @Bind(R.id.cuisineTextView) TextView mCategoriesLabel;
     @Bind(R.id.ratingTextView) TextView mRatingLabel;
     @Bind(R.id.websiteTextView) TextView mWebsiteLabel;
     @Bind(R.id.phoneTextView) TextView mPhoneLabel;
     @Bind(R.id.addressTextView) TextView mAddressLabel;
     @Bind(R.id.saveRestaurantButton) TextView mSaveRestaurantButton;
+    private SharedPreferences mSharedPreferences;
 
     private Restaurant mRestaurant;
 
@@ -51,6 +52,7 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRestaurant = Parcels.unwrap(getArguments().getParcelable("restaurant"));
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Override
@@ -80,9 +82,13 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
             startActivity(phoneIntent);
         }
         if (v== mSaveRestaurantButton){
-            Firebase ref = new Firebase(Constants.FIREBASE_URL_RESTAURANTS);
-            ref.push().setValue(mRestaurant);
-            Toast.makeText(getContext(), "saved", Toast.LENGTH_SHORT).show();
+            String userId = mSharedPreferences.getString(Constants.KEY_UID,null);
+            Firebase userRestaurantsFirebaseRef = new Firebase(Constants.FIREBASE_URL_RESTAURANTS).child(userId);
+            Firebase pushRef = userRestaurantsFirebaseRef.push();
+            String restaurantPushId = pushRef.getKey();
+            mRestaurant.setPushId(restaurantPushId);
+            userRestaurantsFirebaseRef.push().setValue(mRestaurant);
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
     }
 }
