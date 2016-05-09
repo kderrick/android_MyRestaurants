@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.epicodus.myrestaurants.R;
 import com.epicodus.myrestaurants.adapters.RestaurantPagerAdapter;
 import com.epicodus.myrestaurants.models.Restaurant;
+import com.epicodus.myrestaurants.util.ScaleAndFadePageTransformer;
 
 import org.parceler.Parcels;
 
@@ -25,6 +26,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
         ButterKnife.bind(this);
+        mViewPager.setPageTransformer(true, new ScaleAndFadePageTransformer());
 
         mRestaurants = Parcels.unwrap(getIntent().getParcelableExtra("restaurants"));
         int startingPosition = Integer.parseInt(getIntent().getStringExtra("position"));
