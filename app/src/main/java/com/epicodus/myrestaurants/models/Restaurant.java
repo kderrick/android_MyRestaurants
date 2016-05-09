@@ -6,6 +6,8 @@ import java.util.List;
 
 @Parcel
 public class Restaurant {
+
+    private String index;
     String name;
     String phone;
     String website;
@@ -30,6 +32,7 @@ public class Restaurant {
         this.latitude = latitude;
         this.longitude = longitude;
         this.categories = categories;
+        this.index = "not_specified";
     }
 
     public String getName() {
@@ -77,5 +80,13 @@ public class Restaurant {
 
     public void setPushId(String pushId) {
         this.pushId = pushId;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 }
